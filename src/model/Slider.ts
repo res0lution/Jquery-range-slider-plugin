@@ -1,8 +1,6 @@
 import { SliderSettings } from "./SliderSettings";
 
-export interface Slider {}
-
-export class Slider implements Slider {
+export class Slider {
   public settings: SliderSettings;
   public pointer: number;
 
@@ -26,16 +24,12 @@ export class Slider implements Slider {
     if (stepsRange % step === 0) {
       if (pos >= this.settings.settings.maxVal) {
         this.pointer = this.settings.settings.maxVal;
-        throw new Error(
-          "Current pointer position should be smaller then max range value"
-        );
+        throw "Current pointer position should be smaller then max range value";
       }
 
       if (pos <= this.settings.settings.minVal) {
         this.pointer = this.settings.settings.minVal;
-        throw new Error(
-          "Current pointer position should be bigger then min range value"
-        );
+        throw "Current pointer position should be bigger then min range value";
       }
 
       let currentStep = Math.round(
@@ -46,11 +40,9 @@ export class Slider implements Slider {
 
       this.pointer = pos;
     } else {
-      throw new Error(
-        "Step should be an integer, commonly a dividend of the slider's maximum value"
-      );
+      throw 'Step should be an integer, commonly a dividend of the slider\'s maximum value';
     }
-    
+
     return this.pointer;
   }
 }

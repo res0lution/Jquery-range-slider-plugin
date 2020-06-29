@@ -11,7 +11,10 @@
     "suppressImplicitAnyIndexErrors": true,
     "removeComments": true,
     "skipLibCheck": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "typeRoots": [
+      "./node_modules/@types"
+    ]
   },
   "exclude": ["node_modules", "dist"]
 }

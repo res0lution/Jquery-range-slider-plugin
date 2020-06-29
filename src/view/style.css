@@ -1,0 +1,19 @@
+.slider {
+  border-radius: 5px;
+  background: #e0e0e0;
+  background: linear-gradient(left top, #e0e0e0, #eeeeee);
+  height: 15px;
+  margin: 5px;
+  width: 300px;
+}
+
+.thumb {
+  background: blue;
+  border-radius: 3px;
+  cursor: pointer;
+  left: 10px;
+  height: 25px;
+  position: relative;
+  top: -5px;
+  width: 10px;
+}
