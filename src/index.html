@@ -1,22 +1,29 @@
 <!DOCTYPE html>
 <html lang="">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>
+      Range slider
+    </title>
 
-  <title>
-    <%= htmlWebpackPlugin.options.title %>
-  </title>
+    <meta name="description" content="<%= htmlWebpackPlugin.options.title %>" />
+    <link href="./view/style.css" rel="stylesheet" />
+  </head>
 
-  <meta name="description" content="<%= htmlWebpackPlugin.options.title %>">
-  <link href="./view/style.css" rel="stylesheet">
-</head>
+  <body>
+    <div class="slider"></div>
 
-<body>
-  <div class="slider"></div>
-  
-</body>
-
+    <script src="lib/jquery.js"></script>
+    <script>
+      $(".slider").slider({
+        minVal: 200,
+        maxVal: 500,
+        stepVal: 100,
+        value: 100,
+      });
+    </script>
+  </body>
 </html>

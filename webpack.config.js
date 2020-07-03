@@ -1,6 +1,7 @@
 const webpack = require("webpack");
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 const nodeEnv = process.env.NODE_ENV || "development";
 const isProd = nodeEnv === "production";
@@ -54,13 +55,18 @@ let config = {
           }
         : null,
       { test: /\.html$/, loader: "html-loader" },
-      { test: /\.css$/, loaders: ["style-loader", "css-loader"] },
+      { test: /\.css$/, use: ["style-loader", "css-loader"] },
     ].filter(Boolean),
   },
   resolve: {
     extensions: [".ts", ".js"],
   },
-  plugins: plugins,
+  plugins: [
+    plugins,
+    new CopyWebpackPlugin([
+      { from: "../node_modules/jquery/dist/jquery.js", to: "./lib/jquery.js" },
+    ]),
+  ],
   devServer: {
     contentBase: path.join(__dirname, "dist/"),
     compress: true,
