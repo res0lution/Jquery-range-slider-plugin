@@ -1,9 +1,10 @@
 .j-plugin-slider {
   border-radius: 5px;
-  background: #E0E0E0;
-  background: linear-gradient(left top, #E0E0E0, #EEEEEE);
+  background: #e0e0e0;
+  background: linear-gradient(left top, #e0e0e0, #eeeeee);
   height: 15px;
   margin: 5px;
+  position: relative;
   width: 300px;
 }
 
@@ -12,17 +13,18 @@
   border-radius: 3px;
   cursor: pointer;
   height: 25px;
-  position: relative;
+  position: absolute;
   top: -5px;
   width: 10px;
 }
 
 .j-plugin-slider_vertical {
   border-radius: 5px;
-  background: #E0E0E0;
-  background: linear-gradient(left top, #E0E0E0, #EEEEEE);
+  background: #e0e0e0;
+  background: linear-gradient(left top, #e0e0e0, #eeeeee);
   height: 300px;
   margin: 5px;
+  position: relative;
   width: 15px;
 }
 
@@ -32,6 +34,18 @@
   cursor: pointer;
   left: -5px;
   height: 10px;
-  position: relative;
+  position: absolute;
   width: 25px;
+}
+
+.j-plugin-slider__range {
+  background: rgb(86, 169, 247);
+  height: 15px;
+  position: absolute;
+}
+
+.j-plugin-slider__range_vertical {
+  background: rgb(86, 169, 247);
+  position: absolute;
+  width: 15px;
 }

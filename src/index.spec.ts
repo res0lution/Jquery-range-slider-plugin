@@ -2,7 +2,7 @@ import { SliderPresenter } from "./presenter/SliderPresenter";
 import { SliderTemplate } from "./view/SliderTemplate";
 import { Slider } from "./model/Slider";
 import { SliderSettings } from "./model/SliderSettings";
-import { SliderPointer } from "./View/SliderPointer";
+import { SliderPointer } from "./view/SliderPointer";
 
 describe("Model / Slider / Test initialization", () => {
   let slider = new Slider();
@@ -26,9 +26,15 @@ describe("Model / Slider / Test initialization", () => {
   });
 
   it("Should change slider settings", () => {
+    slider.setSettings({
+      range: false,
+      minVal: 1,
+      maxVal: 10,
+      stepVal: 1,
+    });
+
     slider.settings.setMaxVal(150);
     slider.settings.setMinVal(10);
-    
 
     expect(slider.settings).toEqual(
       new SliderSettings({
@@ -36,6 +42,26 @@ describe("Model / Slider / Test initialization", () => {
         minVal: 10,
         maxVal: 150,
         stepVal: 1,
+      })
+    );
+  });
+
+  it("Should initializate RANGE slider object", () => {
+    slider.setSettings({
+      range: true,
+      minVal: 1,
+      maxVal: 10,
+      stepVal: 1,
+      values: [7, 8],
+    });
+
+    expect(slider.settings).toEqual(
+      new SliderSettings({
+        range: true,
+        minVal: 1,
+        maxVal: 10,
+        stepVal: 1,
+        values: [7, 8],
       })
     );
   });
@@ -57,6 +83,10 @@ describe("Model / Slider / Test moving", () => {
   it("Should change pointer position 90", () => {
     expect(slider.setPointerPosition(92)).toEqual(90);
   });
+
+  it("Should change pointer position 20,35", () => {
+    expect(slider.setPointerPosition([22, 37])).toEqual([20, 35]);
+  });
 });
 
 describe("View / Slider template / Test of setting pointer positions", () => {
@@ -64,7 +94,7 @@ describe("View / Slider template / Test of setting pointer positions", () => {
   shadowSlider.classList.add("slider");
   shadowSlider.style.cssText = "width: 300px";
 
-  let slider = new SliderTemplate(shadowSlider, false);
+  let slider = new SliderTemplate(shadowSlider, "vertical");
 
   slider.slider.style.cssText = "width: 300px";
 
@@ -111,6 +141,12 @@ describe("Presenter / SliderPresenter / Test initialization", () => {
   });
 
   it("Should coincide constructor values default 'value'", () => {
+    slider = new SliderPresenter(shadowSlider, {
+      minVal: 10,
+      stepVal: 5,
+      maxVal: 100,
+      range: false,
+    });
     expect(slider.model.settings.settings.value).toEqual(10);
   });
 });
@@ -119,7 +155,7 @@ describe("View / Vertical Slider template / Test of setting pointer positions", 
   let shadowSlider = document.createElement("div");
   shadowSlider.classList.add("slider");
 
-  let slider = new SliderTemplate(shadowSlider, true);
+  let slider = new SliderTemplate(shadowSlider);
   slider.slider.style.cssText = "height: 300px";
 
   it("Curr position should be set", () => {
@@ -128,35 +164,40 @@ describe("View / Vertical Slider template / Test of setting pointer positions", 
   });
 
   it("Should update value of curr position on change 236", () => {
-    slider.thumb.renderCurrentPosInPixelsVertical(236);
+    slider.thumb.renderCurrentPosInPixels(236);
     expect(Math.round(parseInt(slider.thumb.thumb.style.top))).toEqual(78);
   });
 
   it("Should update value of curr position on change 33", () => {
-    slider.thumb.renderCurrentPosInPercentsVertical(33);
+    slider.thumb.renderCurrentPosInPixels(33);
     expect(slider.thumb.thumb.style.top).toEqual("33%");
   });
 });
 
-describe("Presenter / SliderPresenterRange / Test initialization", () => {
-  let shadowSlider = document.createElement("div");
-  shadowSlider.classList.add("slider");
-
-  shadowSlider.style.cssText = "width: 300px";
+describe('Presenter / SliderPresenterRange / Test initialization', () => {
+  let shadowSlider = document.createElement('div');
+  shadowSlider.classList.add('slider');
+  shadowSlider.style.cssText = 'width: 300px';
 
   let slider: SliderPresenter = new SliderPresenter(shadowSlider, {
     minVal: 10,
     stepVal: 5,
     maxVal: 100,
     range: true,
-    values: [25, 35],
+    values: [25, 35]
   });
 
   it("Should coincide constructor set values 'range'", () => {
     expect(slider.model.settings.settings.range).toEqual(true);
   });
-  
+
   it("Should coincide constructor set values 'values'", () => {
     expect(slider.model.settings.settings.values).toEqual([25, 35]);
   });
-});
+
+  it("Should coincide constructor set values on range line", () => {
+    expect(slider.view.range.style.left).toEqual(
+      slider.model.settings.settings.value
+    );
+  });
+})
