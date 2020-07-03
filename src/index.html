@@ -15,6 +15,7 @@
 
   <body>
     <div class="slider"></div>
+    <div class="slider2"></div>
 
     <script src="lib/jquery.js"></script>
     <script>
@@ -22,7 +23,14 @@
         minVal: 200,
         maxVal: 500,
         stepVal: 100,
-        value: 100,
+        value: 349,
+      });
+
+      $(".slider2").slider({
+        minVal: 10,
+        maxVal: 20,
+        stepVal: 1,
+        orientation: "vertical",
       });
     </script>
   </body>

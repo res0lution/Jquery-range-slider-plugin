@@ -31,6 +31,7 @@
   "dependencies": {
     "@types/jasmine": "^3.5.11",
     "@types/jquery": "^3.5.0",
+    "@types/jsdom": "^16.2.3",
     "awesome-typescript-loader": "^5.2.1",
     "copy-webpack-plugin": "^6.0.3",
     "cross-env": "^7.0.2",
@@ -42,6 +43,7 @@
     "jasmine": "^3.5.0",
     "jasmine-core": "^3.5.0",
     "jquery": "^3.5.1",
+    "jsdom": "^16.2.2",
     "karma": "^5.1.0",
     "karma-chrome-launcher": "^3.1.0",
     "karma-coverage-istanbul-reporter": "^3.0.3",
