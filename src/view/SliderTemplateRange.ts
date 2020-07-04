@@ -6,8 +6,9 @@ export class SliderTemplateRange {
   public thumb1: SliderPointer;
   public thumb2: SliderPointer;
   public range: any;
+  public isFollowerPoint: boolean = false;
 
-  constructor(elem: any, isVertical: string) {
+  constructor(elem: any, isVertical?: string, isFollowerPoint?: boolean) {
     this.slider = elem;
 
     if (isVertical === "vertical") {
@@ -16,40 +17,48 @@ export class SliderTemplateRange {
       this.isVertical = false;
     }
 
+    this.isFollowerPoint = isFollowerPoint;
     this.createTemplate();
   }
 
   createTemplate() {
-    this.slider.classList.add("j-plugin-slider");
-
     this.thumb1 = new SliderPointer(
       document.createElement("div"),
       this.slider,
-      this.isVertical
+      this.isVertical,
+      this.isFollowerPoint
     );
     this.thumb2 = new SliderPointer(
       document.createElement("div"),
       this.slider,
-      this.isVertical
+      this.isVertical,
+      this.isFollowerPoint
     );
 
     this.range = document.createElement("div");
 
-    this.slider.appendChild(this.range);
-
-    this.slider.appendChild(this.thumb1.thumb);
-    this.slider.appendChild(this.thumb2.thumb);
+    this.slider.append(this.range);
+    this.slider.append(this.thumb1.thumb);
+    this.slider.append(this.thumb2.thumb);
 
     if (this.isVertical) {
       this.slider.classList.add("j-plugin-slider_vertical");
       this.thumb1.thumb.classList.add("j-plugin-slider__thumb_vertical");
       this.thumb2.thumb.classList.add("j-plugin-slider__thumb_vertical");
       this.range.classList.add("j-plugin-slider__range_vertical");
+
+      if (this.isFollowerPoint) {
+        this.slider.classList.add("j-plugin-slider_with-point_vertical");
+      }
     } else {
       this.thumb1.thumb.classList.add("j-plugin-slider__thumb");
       this.thumb2.thumb.classList.add("j-plugin-slider__thumb");
       this.slider.classList.add("j-plugin-slider");
       this.range.classList.add("j-plugin-slider__range");
+
+      if (this.isFollowerPoint) {
+        this.slider.classList.add("j-plugin-slider_with-point");
+      }
     }
   }
 
@@ -96,5 +105,11 @@ export class SliderTemplateRange {
     let res: number =
       (this.thumb2.currPos - this.thumb1.currPos) / 2 + this.thumb1.currPos;
     return res;
+  }
+
+  destroy() {
+    this.range.remove();
+    this.thumb1.thumb.remove();
+    this.thumb2.thumb.remove();
   }
 }

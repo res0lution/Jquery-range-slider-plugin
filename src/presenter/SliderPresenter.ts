@@ -4,24 +4,24 @@ import { ISliderSettings } from "../model/SliderSettings";
 import { SliderTemplateRange } from "../view/SliderTemplateRange";
 
 export class SliderPresenter {
-  public static NAME: string = "slider";
   public model: Slider;
   public view: any;
-  public isRange: boolean;
 
   constructor(rootElement: any, options: ISliderSettings) {
     this.model = new Slider(options);
-    this.isRange = this.model.settings.settings.range;
+    let isRange = this.model.settings.settings.range;
 
-    if (this.isRange) {
+    if (isRange) {
       this.view = new SliderTemplateRange(
         rootElement,
-        this.model.settings.settings.orientation
+        this.model.settings.settings.orientation,
+        this.model.settings.settings.followerPoint
       );
     } else {
       this.view = new SliderTemplate(
         rootElement,
-        this.model.settings.settings.orientation
+        this.model.settings.settings.orientation,
+        this.model.settings.settings.followerPoint
       );
     }
 
@@ -37,19 +37,18 @@ export class SliderPresenter {
       );
 
       this.render(currThumb, curPosInPercentsWithStep);
+      this.setFollowerPointValue(currThumb, curPosInValWithStep);
     };
 
     this.view.slider.addEventListener("changePointer", onChangePointer);
   }
 
   initStartValue() {
-    if (this.isRange) {
+    if (this.model.settings.settings.range) {
       let curPosInValues: number[] = this.model.settings.settings.values;
       let curPosInValsWithStep: number[] = this.model.setPointerPosition(
         curPosInValues
       );
-      this.model.settings.settings.values = curPosInValsWithStep;
-      this.model.settings.settings.values = curPosInValsWithStep;
 
       let curPosInPercentsWithStep: number[] = [0, 0];
       curPosInPercentsWithStep[0] = this.getCurrPosFromValueToPercents(
@@ -58,31 +57,49 @@ export class SliderPresenter {
       curPosInPercentsWithStep[1] = this.getCurrPosFromValueToPercents(
         curPosInValsWithStep[1]
       );
+
+      this.render(this.view.thumb1, curPosInPercentsWithStep[0]);
+      this.render(this.view.thumb2, curPosInPercentsWithStep[1]);
+      this.setFollowerPointValue(this.view.thumb1, curPosInValsWithStep[0]);
+      this.setFollowerPointValue(this.view.thumb2, curPosInValsWithStep[1]);
+      this.view.initRangeLine();
       this.view.thumb1.currPos = this.calculateFromPercentsToPixels(
         curPosInPercentsWithStep[0]
       );
       this.view.thumb2.currPos = this.calculateFromPercentsToPixels(
         curPosInPercentsWithStep[1]
       );
-
-      this.render(this.view.thumb1, curPosInPercentsWithStep[0]);
-      this.render(this.view.thumb2, curPosInPercentsWithStep[1]);
-      this.view.initRangeLine();
     } else {
       let curPosInValue: number = this.model.settings.settings.value;
       let curPosInValWithStep: number = this.model.setPointerPosition(
         curPosInValue
       );
-      this.model.settings.settings.value = curPosInValWithStep;
       let curPosInPercentsWithStep: number = this.getCurrPosFromValueToPercents(
         curPosInValWithStep
       );
       this.render(this.view.thumb, curPosInPercentsWithStep);
+      this.setFollowerPointValue(this.view.thumb, curPosInValWithStep);
+      this.view.thumb.currPos = this.calculateFromPercentsToPixels(
+        curPosInPercentsWithStep
+      );
     }
   }
 
-  render(curThumb: any, curPos: number) {
+  render(curThumb: SliderPointer, curPos: number) {
     curThumb.renderCurrentPosInPercents(curPos);
+  }
+
+  setFollowerPointValue(curThumb: SliderPointer, currPosInValWithStep: number) {
+    if (this.model.settings.settings.followerPoint) {
+      if (curThumb.followerPoint) {
+        curThumb.followerPoint.setValue(currPosInValWithStep);
+      } else {
+        curThumb.createFollowerPoint();
+        curThumb.followerPoint.setValue(currPosInValWithStep);
+      }
+    } else {
+      curThumb.deleteFollowerPiont();
+    }
   }
 
   calculateCurrPosFromPixelsToValue(curPosInPixels: number) {

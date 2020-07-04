@@ -13,37 +13,102 @@
     <link href="./view/style.css" rel="stylesheet" />
   </head>
 
+  <style>
+    .slider {
+      box-sizing: border-box;
+      border: 1px solid #000;
+      display: flex;
+      justify-content: space-between;
+      max-width: 500px;
+      margin: 5px;
+      padding: 5px;
+      width: 100%;
+    }
+    input {
+      height: 20px;
+      width: 100px;
+    }
+  </style>
+
   <body>
-    <div class="slider"></div>
+    <div class="slider">
+    <div class="slider1"></div>
+  </div>
+  <div class="slider">
     <div class="slider2"></div>
+  </div>
+  <div class="slider">
     <div class="slider3"></div>
+  </div>
+  <div class="slider">
     <div class="slider4"></div>
+  </div>
+  <div class="slider">
+    <div class="slider5"></div>
+  </div>
 
     <script src="lib/jquery.js"></script>
     <script>
-      $(".slider").slider({
-        minVal: 200,
-        maxVal: 500,
-        stepVal: 100,
-        value: 349,
-      });
+      $('.slider1').slider({
+      minVal: 200, 
+      maxVal: 500, 
+      stepVal: 100,
+      value: 349,
+      followerPoint: true
+    })
+    $('.slider2').slider({
+      minVal: 10, 
+      maxVal: 20, 
+      stepVal: 1,
+      value: 18,
+      orientation: 'vertical'
+    })
+    $('.slider3').slider({
+      minVal: 10, 
+      maxVal: 20, 
+      stepVal: 1,
+      range: true,
+      values: [12, 15],
+      followerPoint: true,
+      orientation: 'vertical'
+    })
+    $('.slider4').slider({
+      minVal: 1, 
+      maxVal: 100, 
+      stepVal: 1,
+      range: true,
+      values: [12, 50]
+    })
+    $('.slider5').slider();
 
-      $(".slider3").slider({
-        minVal: 10,
-        maxVal: 20,
-        stepVal: 1,
-        range: true,
-        values: [12, 15],
-      });
+    $('.slider').each(function (i,val){
+        let newInput = document.createElement('input');
+        newInput.setAttribute('type', 'text');
+        $(this).append(newInput);
 
-      $(".slider4").slider({
-        minVal: 1,
-        maxVal: 100,
-        stepVal: 1,
-        range: true,
-        values: [12, 50],
-        orientation: "vertical",
-      });
+        let slider = this.lastElementChild;
+
+        if($(slider).slider('option', 'range')){
+            let newInput2 = document.createElement('input');
+            newInput.setAttribute('type', 'text');
+            $(this).append(newInput);
+
+            $(newInput).val($(slider).slider('option', 'values', 0))
+            $(newInput).on('change', ()=>{
+                $(slider).slider('option', 'values', $(newInput).val());
+            });
+            $(slider).on('changePointer', ()=>{
+                $(newInput).val($(slider).slider('option', 'values'))
+            })
+        }else{
+            $(newInput).val($(slider).slider('option', 'value'))
+            $(newInput).on('change', ()=>{
+                $(slider).slider('option', 'value', $(newInput).val());
+            });
+            $(slider).on('changePointer', ()=>{
+                $(newInput).val($(slider).slider('option', 'value'))
+            })
+        }
     </script>
   </body>
 </html>

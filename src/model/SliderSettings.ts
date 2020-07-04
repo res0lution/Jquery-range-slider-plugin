@@ -46,12 +46,35 @@ export class SliderSettings {
         throw "Step cant be bigger than min and max range";
       }
       if (this.settings.value > this.settings.maxVal) {
-        this.settings.value = this.settings.minVal;
+        this.settings.value = this.settings.maxVal;
         throw "Value cant be bigger than max value";
       }
       if (this.settings.value < this.settings.minVal) {
         this.settings.value = this.settings.minVal;
         throw `Value cant be smaller than min value`;
+      }
+      if (this.settings.values[0] < this.settings.minVal) {
+        this.settings.values[0] = this.settings.minVal;
+        throw `First value cant be smaller than min value`;
+      }
+      if (this.settings.values[1] > this.settings.maxVal) {
+        this.settings.values[1] = this.settings.maxVal;
+        throw `Second value cant be bigger than max value`;
+      }
+      if (this.settings.values[0] > this.settings.values[1]) {
+        this.settings.values[0] = this.settings.values[1];
+        throw `First value cant be bigger than second value`;
+      }
+      if (this.settings.values[1] < this.settings.values[0]) {
+        this.settings.values[1] = this.settings.values[0];
+        throw `Second value cant be bigger than first value`;
+      }
+      if (
+        (this.settings.values[0] !== undefined ||
+          this.settings.values[1] !== undefined) &&
+        !this.settings.range
+      ) {
+        throw "To set values option range should be true";
       }
       if (
         this.settings.orientation !== "vertical" &&
@@ -81,6 +104,7 @@ export class SliderSettings {
 
   setRange(tmp: boolean) {
     this.settings.range = tmp;
+    this.setValidValue();
     this.checkValidValues();
     return this.settings.range;
   }
@@ -104,6 +128,31 @@ export class SliderSettings {
       this.settings.stepVal = this.defaultSettings.stepVal;
       throw "Step cant be bigger then min and max range";
     }
+  }
+
+  setValue(tmp: number) {
+    this.settings.value = tmp;
+    this.setValidValue();
+    this.checkValidValues();
+    return this.settings.value;
+  }
+
+  setValues(tmp: number[]) {
+    this.settings.values = tmp;
+    this.setValidValue();
+    this.checkValidValues();
+    return this.settings.values;
+  }
+
+  setOrientation(tmp: string) {
+    this.settings.orientation = tmp;
+    this.checkValidValues();
+    return this.settings.orientation;
+  }
+
+  setFollowerPoint(tmp: boolean) {
+    this.settings.followerPoint = tmp;
+    return this.settings.followerPoint;
   }
 }
 
