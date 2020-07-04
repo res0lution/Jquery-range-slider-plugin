@@ -21,6 +21,7 @@ import "./view/styles.css";
       let option = arguments[0];
       let setting = arguments[1];
       let value = arguments[2];
+      let valuesOnOfTwoVals = arguments[3];
       let retunValue: any;
       this.each(function (i: number, val: object) {
         let htmlElem = val;
@@ -30,7 +31,8 @@ import "./view/styles.css";
               val,
               option,
               setting,
-              value
+              value,
+              valuesOnOfTwoVals
             );
           }
         });

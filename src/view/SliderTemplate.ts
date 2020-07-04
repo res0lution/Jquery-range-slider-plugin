@@ -21,6 +21,14 @@ export class SliderTemplate {
     this.addEventToSliderClick();
   }
 
+  private sliderOnClick = (event: any) => {
+    event.preventDefault();
+    let newLeft: number = this.isVertical
+      ? event.clientY - this.slider.getBoundingClientRect().top
+      : event.clientX - this.slider.getBoundingClientRect().left;
+    this.thumb.currPos = newLeft;
+  };
+
   createTemplate() {
     this.thumb = new SliderPointer(
       document.createElement("div"),
@@ -49,19 +57,14 @@ export class SliderTemplate {
   }
 
   addEventToSliderClick() {
-    this.slider.onclick = (event: any) => {
-      event.preventDefault();
-      let newLeft: number = this.isVertical
-        ? event.clientY - this.slider.getBoundingClientRect().top
-        : event.clientX - this.slider.getBoundingClientRect().left;
-
-      this.thumb.currPos = newLeft;
-    };
+    this.slider.addEventListener("click", this.sliderOnClick);
   }
 
   destroy() {
+    this.slider.removeEventListener("click", this.sliderOnClick);
     this.thumb.thumb.remove();
-    this.thumb.thumb.remove();
+    this.thumb = undefined;
+    this.slider.classList.remove("j-plugin-slider", "j-plugin-slider_vertical");
   }
 }
 

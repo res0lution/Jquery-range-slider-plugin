@@ -12,7 +12,11 @@ export class SliderPresenterAPI {
     value: string | number | number[] | boolean,
     valuesOneOfTwoVals?: number
   ) {
-    if (option !== "option") throw "First parameter should be 'option'";
+    try {
+      if (option !== "option") throw "First parameter should be 'option'";
+    } catch (err) {
+      console.error(err);
+    }
     let currReturn: string | number | number[] | boolean;
     if (value !== undefined) {
       switch (setting) {
@@ -42,7 +46,10 @@ export class SliderPresenterAPI {
             typeof value === "number"
           ) {
             currReturn = this.getValues(value);
-          } else {
+          } else if (
+            valuesOneOfTwoVals !== undefined &&
+            typeof value === "number"
+          ) {
             currReturn = this.setValues(valuesOneOfTwoVals, <number>value);
           }
         case "followerPoint":
@@ -81,7 +88,7 @@ export class SliderPresenterAPI {
   }
 
   static getFollowerPoint(): boolean {
-    return this.slider.model.settings.settings.range;
+    return this.slider.model.settings.settings.followerPoint;
   }
 
   static setFollowerPoint(newVal: boolean): boolean {
@@ -91,7 +98,7 @@ export class SliderPresenterAPI {
   }
 
   static getRange(): boolean {
-    return this.slider.model.settings.settings.followerPoint;
+    return this.slider.model.settings.settings.range;
   }
 
   static setRange(newVal: boolean): boolean {
@@ -105,14 +112,12 @@ export class SliderPresenterAPI {
         this.slider.model.settings.settings.orientation,
         this.slider.model.settings.settings.followerPoint
       );
-      this.slider.model.settings.settings.value = undefined;
     } else {
       this.slider.view = new SliderTemplate(
         rootElement,
         this.slider.model.settings.settings.orientation,
         this.slider.model.settings.settings.followerPoint
       );
-      this.slider.model.settings.settings.values = undefined;
     }
 
     this.slider.initStartValue();
@@ -167,6 +172,7 @@ export class SliderPresenterAPI {
     newVal = this.slider.model.settings.setOrientation(newVal);
     let rootElement = this.slider.view.slider;
     this.slider.view.destroy();
+    this.slider.view = undefined;
 
     if (this.slider.model.settings.settings.range) {
       this.slider.view = new SliderTemplateRange(
