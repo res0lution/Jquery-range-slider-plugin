@@ -28,11 +28,9 @@ export class SliderPresenter {
     let onChangePointer = (event: any) => {
       let currThumb = event.detail;
       let curPosInPixels: number = currThumb.currPos;
-      let curPosInVal: number = this.calculateCurrPosFromPixelsToValue(
-        curPosInPixels
-      );
+      let curPosInVal: number = this.calculateFromPixelsToValue(curPosInPixels);
       let curPosInValWithStep = this.model.setPointerPosition(curPosInVal);
-      let curPosInPercentsWithStep = this.getCurrPosFromValueToPercents(
+      let curPosInPercentsWithStep = this.calculateFromValueToPercents(
         curPosInValWithStep
       );
 
@@ -58,14 +56,13 @@ export class SliderPresenter {
       );
 
       let curPosInPercentsWithStep: number[] = [0, 0];
-      curPosInPercentsWithStep[0] = this.getCurrPosFromValueToPercents(
+      curPosInPercentsWithStep[0] = this.calculateFromValueToPercents(
         curPosInValsWithStep[0]
       );
-      curPosInPercentsWithStep[1] = this.getCurrPosFromValueToPercents(
+      curPosInPercentsWithStep[1] = this.calculateFromValueToPercents(
         curPosInValsWithStep[1]
       );
 
-      
       this.view.initRangeLine();
       this.view.thumb1.currPos = this.calculateFromPercentsToPixels(
         curPosInPercentsWithStep[0]
@@ -78,10 +75,10 @@ export class SliderPresenter {
       let curPosInValWithStep: number = this.model.setPointerPosition(
         curPosInValue
       );
-      let curPosInPercentsWithStep: number = this.getCurrPosFromValueToPercents(
+      let curPosInPercentsWithStep: number = this.calculateFromValueToPercents(
         curPosInValWithStep
       );
-      
+
       this.view.thumb.currPos = this.calculateFromPercentsToPixels(
         curPosInPercentsWithStep
       );
@@ -101,11 +98,11 @@ export class SliderPresenter {
         curThumb.followerPoint.setValue(currPosInValWithStep);
       }
     } else {
-      curThumb.deleteFollowerPiont();
+      curThumb.deleteFollowerPoint();
     }
   }
 
-  calculateCurrPosFromPixelsToValue(curPosInPixels: number) {
+  calculateFromPixelsToValue(curPosInPixels: number): number {
     let minVal: number = this.model.settings.settings.minVal;
     let maxVal: number = this.model.settings.settings.maxVal;
     let rangeVal: number = maxVal - minVal;
@@ -128,7 +125,7 @@ export class SliderPresenter {
     return curPosInVal + minVal;
   }
 
-  getCurrPosFromValueToPercents(curPosInValue: number) {
+  calculateFromValueToPercents(curPosInValue: number): number {
     let minVal: number = this.model.settings.settings.minVal;
     let maxVal: number = this.model.settings.settings.maxVal;
     let rangeVal: number = maxVal - minVal;
@@ -138,7 +135,7 @@ export class SliderPresenter {
     return currPosInPercents;
   }
 
-  calculateFromPercentsToPixels(curPosInPercents: number) {
+  calculateFromPercentsToPixels(curPosInPercents: number): number {
     let rangePixels: string = "1";
     if (this.model.settings.settings.orientation === "vertical") {
       rangePixels =

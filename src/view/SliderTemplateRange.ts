@@ -25,34 +25,36 @@ export class SliderTemplateRange {
     this.thumb1 = new SliderPointer(
       document.createElement("div"),
       this.slider,
-      this.isVertical,
-      this.isFollowerPoint
+      this.isVertical
     );
     this.thumb2 = new SliderPointer(
       document.createElement("div"),
       this.slider,
-      this.isVertical,
-      this.isFollowerPoint
+      this.isVertical
     );
 
     this.range = document.createElement("div");
 
     this.slider.append(this.range);
-    this.slider.append(this.thumb1.thumb);
-    this.slider.append(this.thumb2.thumb);
+    this.slider.append(this.thumb1.thumbHTMLElem);
+    this.slider.append(this.thumb2.thumbHTMLElem);
 
     if (this.isVertical) {
       this.slider.classList.add("j-plugin-slider_vertical");
-      this.thumb1.thumb.classList.add("j-plugin-slider__thumb_vertical");
-      this.thumb2.thumb.classList.add("j-plugin-slider__thumb_vertical");
+      this.thumb1.thumbHTMLElem.classList.add(
+        "j-plugin-slider__thumb_vertical"
+      );
+      this.thumb2.thumbHTMLElem.classList.add(
+        "j-plugin-slider__thumb_vertical"
+      );
       this.range.classList.add("j-plugin-slider__range_vertical");
 
       if (this.isFollowerPoint) {
         this.slider.classList.add("j-plugin-slider_with-point_vertical");
       }
     } else {
-      this.thumb1.thumb.classList.add("j-plugin-slider__thumb");
-      this.thumb2.thumb.classList.add("j-plugin-slider__thumb");
+      this.thumb1.thumbHTMLElem.classList.add("j-plugin-slider__thumb");
+      this.thumb2.thumbHTMLElem.classList.add("j-plugin-slider__thumb");
       this.slider.classList.add("j-plugin-slider");
       this.range.classList.add("j-plugin-slider__range");
 
@@ -84,16 +86,16 @@ export class SliderTemplateRange {
   initRangeLine() {
     let rangeLine = (event: any) => {
       if (this.isVertical) {
-        this.range.style.top = this.thumb1.thumb.style.top;
-        this.range.style.height =
-          parseInt(this.thumb2.thumb.style.top) -
-          parseInt(this.thumb1.thumb.style.top) +
-          "%";
+       this.range.style.top = this.thumb1.thumbHTMLElem.style.top;
+       this.range.style.height =
+         parseInt(this.thumb2.thumbHTMLElem.style.top) -
+         parseInt(this.thumb1.thumbHTMLElem.style.top) +
+         "%";
       } else {
-        this.range.style.left = this.thumb1.thumb.style.left;
+        this.range.style.left = this.thumb1.thumbHTMLElem.style.left;
         this.range.style.width =
-          parseInt(this.thumb2.thumb.style.left) -
-          parseInt(this.thumb1.thumb.style.left) +
+          parseInt(this.thumb2.thumbHTMLElem.style.left) -
+          parseInt(this.thumb1.thumbHTMLElem.style.left) +
           "%";
       }
     };
@@ -109,8 +111,8 @@ export class SliderTemplateRange {
 
   destroy() {
     this.range.remove();
-    this.thumb1.thumb.remove();
-    this.thumb2.thumb.remove();
+    this.thumb1.thumbHTMLElem.remove();
+    this.thumb2.thumbHTMLElem.remove();
     this.slider.classList.remove("j-plugin-slider_vertical", "j-plugin-slider");
   }
 }

@@ -33,22 +33,20 @@ export class SliderTemplate {
     this.thumb = new SliderPointer(
       document.createElement("div"),
       this.slider,
-      this.isVertical,
-      this.isFollowerPoint
+      this.isVertical
     );
-
-    this.slider.append(this.thumb.thumb);
+    this.slider.append(this.thumb.thumbHTMLElem);  
 
     if (this.isVertical) {
       this.slider.classList.add("j-plugin-slider_vertical");
-      this.thumb.thumb.classList.add("j-plugin-slider__thumb_vertical");
+      this.thumb.thumbHTMLElem.classList.add("j-plugin-slider__thumb_vertical");
 
       if (this.isFollowerPoint) {
         this.slider.classList.add("j-plugin-slider_with-point_vertical");
       }
     } else {
       this.slider.classList.add("j-plugin-slider");
-      this.thumb.thumb.classList.add("j-plugin-slider__thumb");
+      this.thumb.thumbHTMLElem.classList.add("j-plugin-slider__thumb");
 
       if (this.isFollowerPoint) {
         this.thumb.createFollowerPoint();
@@ -62,7 +60,7 @@ export class SliderTemplate {
 
   destroy() {
     this.slider.removeEventListener("click", this.sliderOnClick);
-    this.thumb.thumb.remove();
+    this.thumb.thumbHTMLElem.remove();
     this.thumb = undefined;
     this.slider.classList.remove("j-plugin-slider", "j-plugin-slider_vertical");
   }
