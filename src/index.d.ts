@@ -1,0 +1,1 @@
+import "./view/styles.css";
