@@ -86,11 +86,11 @@ export class SliderTemplateRange {
   initRangeLine() {
     let rangeLine = (event: any) => {
       if (this.isVertical) {
-       this.range.style.top = this.thumb1.thumbHTMLElem.style.top;
-       this.range.style.height =
-         parseInt(this.thumb2.thumbHTMLElem.style.top) -
-         parseInt(this.thumb1.thumbHTMLElem.style.top) +
-         "%";
+        this.range.style.top = this.thumb1.thumbHTMLElem.style.top;
+        this.range.style.height =
+          parseInt(this.thumb2.thumbHTMLElem.style.top) -
+          parseInt(this.thumb1.thumbHTMLElem.style.top) +
+          "%";
       } else {
         this.range.style.left = this.thumb1.thumbHTMLElem.style.left;
         this.range.style.width =

@@ -1,6 +1,7 @@
 import { SliderSettings } from "./SliderSettings";
+import { isArray } from "util";
 
-export class Slider {
+class Slider {
   public settings: SliderSettings;
 
   constructor(sett?: object) {
@@ -19,10 +20,9 @@ export class Slider {
     let minVal = this.settings.settings.minVal;
     let step: number = this.settings.settings.stepVal;
     let stepsRange: number = maxVal - minVal;
-
     try {
       if (stepsRange % step === 0) {
-        if (typeof pos === "object") {
+        if (isArray(pos)) {
           let curVals: number[] = [pos[0] - minVal, pos[1] - minVal];
           let currentStep: number[] = [
             Math.round(curVals[0] / step),
@@ -51,5 +51,7 @@ export class Slider {
     }
   }
 }
+
+export { Slider };
 
 export default Slider;
