@@ -1,8 +1,8 @@
-import { SliderTemplate } from "./View/SliderTemplate";
-import { Slider } from "./Model/Slider";
-import { SliderSettings } from "./Model/SliderSettings";
-import { SliderPresenterAPI } from "./Presenter/SliderPresenterAPI";
-import { SliderPresenter } from "./Presenter/SliderPresenter";
+import { SliderTemplate } from "./view/SliderTemplate";
+import { Slider } from "./model/Slider";
+import { SliderSettings } from "./model/SliderSettings";
+import { SliderPresenterAPI } from "./presenter/SliderPresenterAPI";
+import { SliderPresenter } from "./presenter/SliderPresenter";
 
 describe("Model / Slider / Test initialization", () => {
   const slider = new Slider();

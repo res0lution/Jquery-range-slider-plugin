@@ -1,32 +1,36 @@
-/* eslint-disable consistent-return */
-import { ISliderSettings } from './model/ISliderSettings';
-import { SliderPresenter } from './presenter/SliderPresenter';
-import { SliderPresenterAPI } from './presenter/SliderPresenterAPI';
-import './view/styles.css';
+import { ISliderSettings } from "./model/ISliderSettings";
+import { SliderPresenter } from "./presenter/SliderPresenter";
+import { SliderPresenterAPI } from "./presenter/SliderPresenterAPI";
+import "./view/styles.css";
 
+declare global {
+  interface Window {
+    $: JQuery;
+  }
+  interface JQuery {
+    slider: () => JQuery<Element> | void;
+  }
+}
 
 (function initialization($: JQueryStatic) {
   const sliders: SliderPresenter[] = [];
 
-
-  // eslint-disable-next-line dot-notation
-  $.fn['slider'] = function getStart(...args:any) {
-    if (typeof args[0] === 'object' || args[0] === undefined) {
+  $.fn.slider = function getStart(...args: any) {
+    if (typeof args[0] === "object" || args[0] === undefined) {
       const settings: ISliderSettings = args[0];
-      return this.each((i:number, val:object) => {
+      return this.each((i: number, val: object) => {
         const htmlElem = val;
         return sliders.push(new SliderPresenter(htmlElem, settings));
       });
     }
-    if (typeof args[0] === 'string') {
+
+    if (typeof args[0] === "string") {
       const [option, setting, value, valuesOneOfTwoVals] = args;
 
-      let returnValue:any;
-      // eslint-disable-next-line array-callback-return
-      this.map((i:number, val:object) => {
+      let returnValue: any;
+      this.map((i: number, val: object) => {
         const htmlElem = val;
-        // eslint-disable-next-line array-callback-return
-        sliders.map((htmlItem) => {
+        sliders.forEach((htmlItem) => {
           if (htmlItem.view.slider === htmlElem) {
             returnValue = SliderPresenterAPI.enterPoint({
               valuesOneOfTwoVals,
@@ -41,4 +45,4 @@ import './view/styles.css';
       return returnValue;
     }
   };
-}(jQuery));
+})(jQuery);

@@ -65,6 +65,7 @@ let config = {
     plugins,
     new CopyWebpackPlugin([
       { from: "../node_modules/jquery/dist/jquery.js", to: "./lib/jquery.js" },
+      { from: "../src/view/styles.css", to: "./styles.css" },
     ]),
   ],
   devServer: {
