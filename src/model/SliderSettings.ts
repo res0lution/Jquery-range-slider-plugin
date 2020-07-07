@@ -1,7 +1,6 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import * as $ from 'jquery';
-import { ISliderSettings } from './ISliderSettings';
-
+import * as $ from "jquery";
+import { ISliderSettings } from "./ISliderSettings";
 
 class SliderSettings {
   protected defaultSettings: ISliderSettings = {
@@ -9,7 +8,7 @@ class SliderSettings {
     minVal: 0,
     maxVal: 100,
     stepVal: 1,
-    orientation: 'horizontal',
+    orientation: "horizontal",
     value: null,
     values: [null, null],
     followerPoint: false,
@@ -18,17 +17,19 @@ class SliderSettings {
   public settings: ISliderSettings;
 
   public errors = {
-    minBiggerMax: 'Min slider range value cant be bigger than max value',
-    stepBiggerMaxMin: 'Step cant be bigger than min and max range',
-    stepInteger: 'Step should be an integer, commonly a dividend of the slider\'s maximum value',
-    valueBiggerMax: 'Value cant be bigger than max value',
-    valueSmallerMin: 'Value cant be smaller than min value',
-    firstValueSmallerMin: 'First value cant be smaller than min value',
-    secondValueBiggerMax: 'Second value cant be bigger than max value',
-    firstValueBiggerSecond: 'First value cant be bigger than second value',
-    secondValueBiggerFirst: 'Second value cant be bigger than first value',
-    rangeValuesInSingle: 'Slider has range values but it is not range',
-    notValidOrientation: 'Orientation of slider has only two values "horizontal" or "vertical"',
+    minBiggerMax: "Min slider range value cant be bigger than max value",
+    stepBiggerMaxMin: "Step cant be bigger than min and max range",
+    stepInteger:
+      "Step should be an integer, commonly a dividend of the slider's maximum value",
+    valueBiggerMax: "Value cant be bigger than max value",
+    valueSmallerMin: "Value cant be smaller than min value",
+    firstValueSmallerMin: "First value cant be smaller than min value",
+    secondValueBiggerMax: "Second value cant be bigger than max value",
+    firstValueBiggerSecond: "First value cant be bigger than second value",
+    secondValueBiggerFirst: "Second value cant be bigger than first value",
+    rangeValuesInSingle: "Slider has range values but it is not range",
+    notValidOrientation:
+      'Orientation of slider has only two values "horizontal" or "vertical"',
   };
 
   constructor(setts: ISliderSettings) {
@@ -41,16 +42,21 @@ class SliderSettings {
   checkValidValues() {
     try {
       const ordersModule = {
-        ORIENTATION_VERTICAL: 'vertical',
-        ORIENTATION_HORIZONTAL: 'horizontal',
+        ORIENTATION_VERTICAL: "vertical",
+        ORIENTATION_HORIZONTAL: "horizontal",
       };
-      const isOrientationVertical = this.settings.orientation !== ordersModule.ORIENTATION_VERTICAL;
-      const isOrientationHorizontal = this.settings.orientation !== ordersModule.ORIENTATION_HORIZONTAL;
+      const isOrientationVertical =
+        this.settings.orientation !== ordersModule.ORIENTATION_VERTICAL;
+      const isOrientationHorizontal =
+        this.settings.orientation !== ordersModule.ORIENTATION_HORIZONTAL;
       const isOrientationSet = isOrientationVertical && isOrientationHorizontal;
-      const isOneOfRangeValueSet = this.settings.values[0] !== null || this.settings.values[1] !== null;
+      const isOneOfRangeValueSet =
+        this.settings.values[0] !== null || this.settings.values[1] !== null;
       const valueRange = this.settings.maxVal - this.settings.minVal;
+      const stepSmallerNull = this.settings.stepVal < 0;
+      const stepBiggerRange = this.settings.stepVal < valueRange;
 
-      if (this.settings.minVal > this.settings.maxVal) {
+      if (this.settings.minVal >= this.settings.maxVal) {
         this.settings.maxVal = this.defaultSettings.maxVal;
         this.settings.minVal = this.defaultSettings.minVal;
         this.settings.value = this.defaultSettings.value;
@@ -58,7 +64,7 @@ class SliderSettings {
         this.settings.stepVal = this.defaultSettings.stepVal;
         throw this.errors.minBiggerMax;
       }
-      if (this.settings.stepVal >= valueRange) {
+      if (stepSmallerNull && stepBiggerRange) {
         this.settings.stepVal = this.defaultSettings.stepVal;
         throw this.errors.stepBiggerMaxMin;
       }
@@ -74,20 +80,32 @@ class SliderSettings {
         this.settings.value = this.settings.minVal;
         throw this.errors.valueSmallerMin;
       }
-      if (this.settings.values[0] < this.settings.minVal && this.settings.range) {
+      if (
+        this.settings.values[0] < this.settings.minVal &&
+        this.settings.range
+      ) {
         this.settings.values[0] = this.settings.minVal;
         throw this.errors.firstValueSmallerMin;
       }
-      if (this.settings.values[1] > this.settings.maxVal && this.settings.range) {
+      if (
+        this.settings.values[1] > this.settings.maxVal &&
+        this.settings.range
+      ) {
         this.settings.values[1] = this.settings.maxVal;
         throw this.errors.secondValueBiggerMax;
       }
-      if (this.settings.values[0] > this.settings.values[1] && this.settings.range) {
+      if (
+        this.settings.values[0] > this.settings.values[1] &&
+        this.settings.range
+      ) {
         // eslint-disable-next-line prefer-destructuring
         this.settings.values[0] = this.settings.values[1];
         throw this.errors.firstValueBiggerSecond;
       }
-      if (this.settings.values[1] < this.settings.values[0] && this.settings.range) {
+      if (
+        this.settings.values[1] < this.settings.values[0] &&
+        this.settings.range
+      ) {
         // eslint-disable-next-line prefer-destructuring
         this.settings.values[1] = this.settings.values[0];
         throw this.errors.secondValueBiggerFirst;
@@ -105,12 +123,10 @@ class SliderSettings {
   }
 
   setValidValue() {
-    if (!this.settings.range) {
-      if (this.settings.values[0] !== null) {
-        // eslint-disable-next-line prefer-destructuring
-        this.settings.value = this.settings.values[0];
-        this.settings.values = [null, null];
-      }
+    if (this.settings.values[0] !== null && !this.settings.range) {
+      // eslint-disable-next-line prefer-destructuring
+      this.settings.value = this.settings.values[0];
+      this.settings.values = [null, null];
     }
     if (this.settings.value === null && !this.settings.range) {
       this.settings.value = this.settings.minVal;
@@ -151,7 +167,7 @@ class SliderSettings {
 
   setMinVal(tmp: number) {
     try {
-      if (Number(tmp) > this.settings.maxVal) {
+      if (Number(tmp) >= this.settings.maxVal) {
         throw this.errors.minBiggerMax;
       }
       this.settings.minVal = Number(tmp);
@@ -165,7 +181,7 @@ class SliderSettings {
 
   setMaxVal(tmp: number) {
     try {
-      if (Number(tmp) < this.settings.minVal) {
+      if (Number(tmp) <= this.settings.minVal) {
         throw this.errors.minBiggerMax;
       }
       this.settings.maxVal = Number(tmp);
@@ -180,7 +196,9 @@ class SliderSettings {
   setStepVal(tmp: number) {
     try {
       const valueRange = this.settings.maxVal - this.settings.minVal;
-      if (Number(tmp) < valueRange) {
+      const stepBiggerNull = Number(tmp) > 0;
+      const stepSmallerRange = Number(tmp) < valueRange;
+      if (stepBiggerNull && stepSmallerRange) {
         this.settings.stepVal = Number(tmp);
         this.checkValidValues();
         return this.settings.stepVal;
@@ -219,8 +237,6 @@ class SliderSettings {
   }
 }
 
-export {
-  SliderSettings,
-};
+export { SliderSettings };
 
 export default SliderSettings;

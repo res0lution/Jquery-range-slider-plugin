@@ -24,7 +24,7 @@ class SliderPresenter {
   onChangePointer(event: any) {
     const currThumb = event.detail;
 
-    const curPosInPixels: number = currThumb.currPos;
+    const curPosInPixels: number = currThumb.curPos;
     const curPosInVal: number = this.calculateFromPixelsToValue(curPosInPixels);
     const curPosInValWithStep = this.model.setPointerPosition(curPosInVal);
 
@@ -76,11 +76,11 @@ class SliderPresenter {
 
       this.view.initRangeLine();
 
-      this.view.thumb1.currPos = this.calculateFromPercentsToPixels(
-        curPosInPercentsWithStep[0]
+      this.view.thumb1.setCurPos(
+        this.calculateFromPercentsToPixels(curPosInPercentsWithStep[0])
       );
-      this.view.thumb2.currPos = this.calculateFromPercentsToPixels(
-        curPosInPercentsWithStep[1]
+      this.view.thumb2.setCurPos(
+        this.calculateFromPercentsToPixels(curPosInPercentsWithStep[1])
       );
     } else {
       const curPosInValue: number = this.model.settings.settings.value;
@@ -92,8 +92,8 @@ class SliderPresenter {
         curPosInValWithStep
       );
 
-      this.view.thumb.currPos = this.calculateFromPercentsToPixels(
-        curPosInPercentsWithStep
+      this.view.thumb.setCurPos(
+        this.calculateFromPercentsToPixels(curPosInPercentsWithStep)
       );
     }
   }
