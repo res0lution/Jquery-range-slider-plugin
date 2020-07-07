@@ -28,7 +28,7 @@ class SliderPointer {
     this.isVertical = isVertical;
   }
 
-  setCurPos(newCurrPos: number) {
+  setCurPosInPercents(newCurrPos: number) {
     this.curPos = newCurrPos;
 
     this.sliderHTMLElem.dispatchEvent(
@@ -37,6 +37,21 @@ class SliderPointer {
         detail: this,
       })
     );
+  }
+
+  setCurPosInPixels(newCurrPos: number) {
+    this.curPos = this.calcPixelsToPercents(newCurrPos);
+
+    this.sliderHTMLElem.dispatchEvent(
+      new CustomEvent("changePointer", {
+        bubbles: true,
+        detail: this,
+      })
+    );
+  }
+
+  getCurPosInPixels() {
+    return this.calcPercentsToPixels(this.curPos);
   }
 
   bindEventListeners(anotherPoint?: SliderPointer) {
@@ -56,6 +71,7 @@ class SliderPointer {
   };
 
   mouseUp = () => {
+    this.endPos = this.curPos;
     document.removeEventListener("mouseup", this.mouseUp);
     document.removeEventListener("mousemove", this.mouseMove);
   };
@@ -63,27 +79,26 @@ class SliderPointer {
   mouseMove = (event: any) => {
     event.preventDefault();
     const { rightEdge, leftEdge, mouseX, mouseY } = this.mouseMoveParameters;
-    let newCurPos: number = this.isVertical
-      ? this.endPos - mouseY + event.clientY
-      : this.endPos - mouseX + event.clientX;
 
+    const endPosInPixels = this.calcPercentsToPixels(this.endPos);
+
+    let newCurPos: number = this.isVertical
+      ? endPosInPixels - mouseY + event.clientY
+      : endPosInPixels - mouseX + event.clientX;
     if (newCurPos < leftEdge) {
       newCurPos = leftEdge;
     }
     if (newCurPos > rightEdge) {
       newCurPos = rightEdge;
     }
-    console.log(this.endPos);
-    this.setCurPos(newCurPos);
+    this.setCurPosInPercents(this.calcPixelsToPercents(newCurPos));
   };
 
   calcMoveBorders(event: any) {
     const mouseX = event.clientX;
     const mouseY = event.clientY;
 
-    let rightEdge: number = this.isVertical
-      ? this.sliderHTMLElem.offsetHeight
-      : this.sliderHTMLElem.offsetWidth;
+    let rightEdge: number = this.getPathLength();
 
     let leftEdge: number = 0;
 
@@ -103,13 +118,36 @@ class SliderPointer {
     };
   }
 
+  getPathLength() {
+    const widthOrHeight: number = this.isVertical
+      ? parseInt(
+          this.sliderHTMLElem.getBoundingClientRect().height ||
+            this.sliderHTMLElem.style.height,
+          10
+        )
+      : parseInt(
+          this.sliderHTMLElem.getBoundingClientRect().width ||
+            this.sliderHTMLElem.style.width,
+          10
+        );
+    return widthOrHeight;
+  }
+
+  calcPixelsToPercents(valueInPixels: number) {
+    const lengthInPixels = this.getPathLength();
+    const valueInPercents = (valueInPixels * 100) / lengthInPixels;
+    return valueInPercents;
+  }
+
+  calcPercentsToPixels(valueInPercents: number) {
+    const lengthInPixels = this.getPathLength();
+    const valueInPixels = (valueInPercents / 100) * lengthInPixels;
+    return valueInPixels;
+  }
+
   renderCurrentPosInPixels(newPos: number) {
-    const widthOrHeight: string = this.isVertical
-      ? this.sliderHTMLElem.getBoundingClientRect().height ||
-        this.sliderHTMLElem.style.height
-      : this.sliderHTMLElem.getBoundingClientRect().width ||
-        this.sliderHTMLElem.style.width;
-    const newPosition = (newPos * 100) / parseInt(widthOrHeight, 10);
+    const length = this.getPathLength();
+    const newPosition = (newPos * 100) / length;
     return this.renderCurrentPosInPercents(newPosition);
   }
 
@@ -121,11 +159,7 @@ class SliderPointer {
   }
 
   createFollowerPoint() {
-    if (this.isVertical) {
-      this.sliderHTMLElem.classList.add("j-plugin-slider_with-point_vertical");
-    } else {
-      this.sliderHTMLElem.classList.add("j-plugin-slider_with-point");
-    }
+    this.sliderHTMLElem.parentNode.classList.add("j-plugin-slider_with-point");
     this.followerPoint = new FollowerPoint(this.thumbHTMLElem, this.isVertical);
   }
 
@@ -133,9 +167,8 @@ class SliderPointer {
     if (this.followerPoint !== undefined) {
       this.followerPoint.destroy();
       this.followerPoint = undefined;
-      this.sliderHTMLElem.classList.remove("j-plugin-slider_with-point");
-      this.sliderHTMLElem.classList.remove(
-        "j-plugin-slider_with-point_vertical"
+      this.sliderHTMLElem.parentNode.classList.remove(
+        "j-plugin-slider_with-point"
       );
     }
   }

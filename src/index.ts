@@ -1,7 +1,7 @@
 import { ISliderSettings } from "./model/ISliderSettings";
 import { SliderPresenter } from "./presenter/SliderPresenter";
 import { SliderPresenterAPI } from "./presenter/SliderPresenterAPI";
-import "./view/styles.css";
+import "./view/styles.scss";
 
 declare global {
   interface Window {
