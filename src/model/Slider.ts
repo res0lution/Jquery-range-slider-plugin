@@ -1,5 +1,5 @@
-import { SliderSettings } from "./SliderSettings";
 import { isArray } from "util";
+import { SliderSettings } from "./SliderSettings";
 
 class Slider {
   public settings: SliderSettings;
@@ -13,42 +13,35 @@ class Slider {
   }
 
   setPointerPosition(pos: number[]): number[];
+
+  // eslint-disable-next-line no-dupe-class-members
   setPointerPosition(pos: number): number;
 
+  // eslint-disable-next-line no-dupe-class-members
   setPointerPosition(pos: any) {
-    let maxVal = this.settings.settings.maxVal;
-    let minVal = this.settings.settings.minVal;
-    let step: number = this.settings.settings.stepVal;
-    let stepsRange: number = maxVal - minVal;
-    try {
-      if (stepsRange % step === 0) {
-        if (isArray(pos)) {
-          let curVals: number[] = [pos[0] - minVal, pos[1] - minVal];
-          let currentStep: number[] = [
-            Math.round(curVals[0] / step),
-            Math.round(curVals[1] / step),
-          ];
-          curVals = [
-            currentStep[0] * step + minVal,
-            currentStep[1] * step + minVal,
-          ];
+    const { minVal } = this.settings.settings;
+    const step: number = this.settings.settings.stepVal;
 
-          this.settings.settings.values = curVals;
-          return curVals;
-        } else {
-          let curVal: number = pos - minVal;
-          let currentStep: number = Math.round(curVal / step);
-          curVal = currentStep * step;
-          curVal += minVal;
-          this.settings.settings.value = curVal;
-          return curVal;
-        }
-      } else {
-        throw 'Step should be an integer, commonly a dividend of the slider\'s maximum value';
-      }
-    } catch (err) {
-      console.error(err);
+    if (isArray(pos)) {
+      let curVals: number[] = [pos[0] - minVal, pos[1] - minVal];
+      const currentStep: number[] = [
+        Math.round(curVals[0] / step),
+        Math.round(curVals[1] / step),
+      ];
+      curVals = [
+        currentStep[0] * step + minVal,
+        currentStep[1] * step + minVal,
+      ];
+      this.settings.settings.values = curVals;
+      return curVals;
     }
+
+    let curVal: number = pos - minVal;
+    const currentStep: number = Math.round(curVal / step);
+    curVal = currentStep * step;
+    curVal += minVal;
+    this.settings.settings.value = curVal;
+    return curVal;
   }
 }
 

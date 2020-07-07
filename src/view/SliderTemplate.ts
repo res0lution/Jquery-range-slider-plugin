@@ -1,21 +1,20 @@
+// eslint-disable-next-line import/no-named-as-default
 import SliderPointer from "./SliderPointer";
 
-export class SliderTemplate {
+class SliderTemplate {
   public slider: any;
+
   public thumb: SliderPointer;
-  public isVertical: boolean;
+
+  public isVertical: boolean = false;
+
   public isFollowerPoint: boolean = false;
 
-  constructor(elem: any, isVertical?: string, isFollowerPoint?: boolean) {
+  constructor(elem: any, isVertical?: boolean, isFollowerPoint?: boolean) {
     this.slider = elem;
-
-    if (isVertical === "vertical") {
-      this.isVertical = true;
-    } else {
-      this.isVertical = false;
-    }
-
+    this.isVertical = isVertical;
     this.isFollowerPoint = isFollowerPoint;
+
     this.createTemplate();
     this.thumb.createEventListeners();
     this.addEventToSliderClick();
@@ -23,7 +22,7 @@ export class SliderTemplate {
 
   private sliderOnClick = (event: any) => {
     event.preventDefault();
-    let newLeft: number = this.isVertical
+    const newLeft: number = this.isVertical
       ? event.clientY - this.slider.getBoundingClientRect().top
       : event.clientX - this.slider.getBoundingClientRect().left;
     this.thumb.currPos = newLeft;
@@ -35,19 +34,17 @@ export class SliderTemplate {
       this.slider,
       this.isVertical
     );
-    this.slider.append(this.thumb.thumbHTMLElem);  
+    this.slider.append(this.thumb.thumbHTMLElem);
 
     if (this.isVertical) {
       this.slider.classList.add("j-plugin-slider_vertical");
       this.thumb.thumbHTMLElem.classList.add("j-plugin-slider__thumb_vertical");
-
       if (this.isFollowerPoint) {
         this.slider.classList.add("j-plugin-slider_with-point_vertical");
       }
     } else {
       this.slider.classList.add("j-plugin-slider");
       this.thumb.thumbHTMLElem.classList.add("j-plugin-slider__thumb");
-
       if (this.isFollowerPoint) {
         this.thumb.createFollowerPoint();
       }
@@ -65,5 +62,5 @@ export class SliderTemplate {
     this.slider.classList.remove("j-plugin-slider", "j-plugin-slider_vertical");
   }
 }
-
+export { SliderTemplate };
 export default SliderTemplate;
